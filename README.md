@@ -3,7 +3,6 @@
 ```
 git clone https://github.com/gabrielTake/JsonServer
 cd JsonServer
-md samples
 yarn
 yarn dev:srv
 ```

@@ -7,7 +7,13 @@ const routes = Router();
 const folder = join(__dirname, '..', '..', 'samples',);
 
 routes.get('/', async (req, res) => {
-  const folderContents = await fs.readdir(folder);
+  let folderContents;
+  try {
+    folderContents = await fs.readdir(folder);
+  } catch {
+    fs.mkdir(folder);
+    return res.json({ message: 'No json file found' });
+  }
 
   //@ts-ignore
   const jsonFiles = [];
@@ -18,16 +24,12 @@ routes.get('/', async (req, res) => {
   });
 
   if (!jsonFiles.length) {
-    return res.json({ message: 'No json file in the folder' });
+    return res.json({ message: 'No json file in the "samples" folder' });
   }
 
-  else if (jsonFiles.length === 1) {
-    const file = await fs.readFile(join(folder, folderContents[0]));
-    const jsonData = (JSON.parse(file.toString()));
-    return res.json(jsonData);
-  }
-
-  return res.json({ message: 'Multiple json files. implementing...' });
+  const file = await fs.readFile(join(folder, folderContents[0]));
+  const jsonData = (JSON.parse(file.toString()));
+  return res.json(jsonData);
 });
 
 export default routes;
