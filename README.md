@@ -1,9 +1,13 @@
-# TS http server
+# JSON file server
 
-Server runs on Express
+```
+git clone https://github.com/gabrielTake/JsonServer
+cd JsonServer
+md samples
+yarn
+yarn dev:srv
+```
 
-Template is configured with:
+This will start a server on localhost:3333
 
-- ESlint (AirBnb pattern)
-- Prettier
-- Debugger (attach mode)
+Copy the .json file into /samples and refresh the page
