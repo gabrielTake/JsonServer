@@ -1,9 +1,33 @@
+import fs from 'fs/promises';
+import { join } from 'path'
 import { Router } from 'express';
 
 const routes = Router();
 
-routes.get('/', (req, res) => {
-  return res.json({ message: 'hello from Template' });
+const folder = join(__dirname, '..', '..', 'samples',);
+
+routes.get('/', async (req, res) => {
+  const folderContents = await fs.readdir(folder);
+
+  //@ts-ignore
+  const jsonFiles = [];
+  folderContents.forEach(file => {
+    if (file.toLowerCase().includes('.json')) {
+      jsonFiles.push(file);
+    }
+  });
+
+  if (!jsonFiles.length) {
+    return res.json({ message: 'No json file in the folder' });
+  }
+
+  else if (jsonFiles.length === 1) {
+    const file = await fs.readFile(join(folder, folderContents[0]));
+    const jsonData = (JSON.parse(file.toString()));
+    return res.json(jsonData);
+  }
+
+  return res.json({ message: 'Multiple json files. implementing...' });
 });
 
 export default routes;
